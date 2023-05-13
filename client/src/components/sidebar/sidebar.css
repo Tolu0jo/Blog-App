@@ -1,11 +1,11 @@
 .sidebar{
+    flex:3;
     margin: 20px;
     padding-bottom: 30px;
     background-color: rgb(236, 236, 236);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    flex:3;
     align-items: center;
 }
 .sidebarItem{
@@ -25,6 +25,7 @@
     line-height: 20px;
 }
 .sidebarItem > img{
+    width: 100%;
     margin-top:15px;
 }
 
