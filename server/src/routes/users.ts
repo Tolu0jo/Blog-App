@@ -1,8 +1,8 @@
-import express from 'express';
+import express,{Response,Request,NextFunction}from 'express';
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', (req:Request, res:Response, next:NextFunction) =>{
   res.send('respond with a resource');
 });
 
