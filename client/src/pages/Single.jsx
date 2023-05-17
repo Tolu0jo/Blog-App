@@ -1,28 +1,35 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useLocation} from 'react-router-dom'
 import Menu from '../components/Menu'
+import { useState } from 'react';
+import api from '../axios';
 
 const Single = () => {
-  const[posts,setPosts]=useState([]);
+  const[post,setPost]=useState({});
 
-  const cat = useLocation().search
-//console.log(location)
+  const location = useLocation()
+console.log(location)
+//const postId = location.pathname.split('/')[location.pathname.split('/').length-1]
+const postId = location.pathname.split('/')[2]
+console.log(postId)
+
  useEffect(()=>{
      const fetchData = async()=>{
          try {
-             const res = api.get(`/posts/${cat}`)
-             setPosts(res.data.posts)                
+             const res = api.get(`/posts/${postId}`)
+             setPost(res.data.posts)                
          } catch (error) {
              console.error(error)
          }
-     } 
-    },[cat])
+     };
+     fetchData()
+    },[post])
   return (
     <div className='single'>
         <div className="content">
-            <img src="https://images.unsplash.com/photo-1551021794-03be4ddaf67d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGltYWdlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="" />
+            <img src={post?.img} alt="" />
        <div className="user">
-        <img src="https://images.unsplash.com/photo-1579865346865-9223701ba92e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTB8fGltYWdlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="" />
+        <img src={post?.username}alt="" />
         <div className="info">
             <span>John</span>
             <p>Posted 2 days ago</p>

@@ -1565,6 +1565,11 @@ minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
+momment@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/momment/-/momment-0.0.1.tgz#0970260ebbeb505ce9b6f3fe929862e9bed30711"
+  integrity sha512-AvXVohTAJGdvRX+audOcqcQLsezKf4hR+QJf4WY2+sHoW37sejk1hrr0qBffSkwgoSZAjkuQDOqC1FtKE7y8Kw==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
