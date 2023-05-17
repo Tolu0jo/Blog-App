@@ -3,6 +3,20 @@ import { Link } from 'react-router-dom'
 import Menu from '../components/Menu'
 
 const Single = () => {
+  const[posts,setPosts]=useState([]);
+
+  const cat = useLocation().search
+//console.log(location)
+ useEffect(()=>{
+     const fetchData = async()=>{
+         try {
+             const res = api.get(`/posts/${cat}`)
+             setPosts(res.data.posts)                
+         } catch (error) {
+             console.error(error)
+         }
+     } 
+    },[cat])
   return (
     <div className='single'>
         <div className="content">
