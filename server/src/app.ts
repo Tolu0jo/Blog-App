@@ -3,13 +3,23 @@ import express, {Request,Response,NextFunction} from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import cors from "cors"
 
-import indexRouter from './routes/index';
+import postsRouter from './routes/posts';
 import usersRouter from './routes/users';
+import { db } from './config/db';
 
 const app = express();
 
+db.sync().then(()=>{
+  console.log("Database connected Successfully...")
+}).catch(err=>{
+  console.log(err)
+})
 
+app.use(cors({
+  origin: 'http://localhost:5173', 
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -17,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

@@ -1,9 +1,11 @@
 import express,{Response,Request,NextFunction}from 'express';
+import { logOut, signIn, signUp } from '../controller/userController';
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', (req:Request, res:Response, next:NextFunction) =>{
-  res.send('respond with a resource');
-});
+router.post('/signup', signUp);
+router.post('/login', signIn);
+router.post('/logout', logOut);
+
 
 export default router
