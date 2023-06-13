@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logOut = exports.signIn = exports.signUp = void 0;
+exports.logOut = exports.getProfile = exports.signIn = exports.signUp = void 0;
 const uuid_1 = require("uuid");
 const userModel_1 = __importDefault(require("../model/userModel"));
 const utility_1 = require("../utils/utility");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const sequelize_1 = require("sequelize");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const postModel_1 = __importDefault(require("../model/postModel"));
 const jwtsecret = process.env.JWT_SECRET;
 //==================SIGNUP===================//
 const signUp = async (req, res) => {
@@ -61,7 +62,7 @@ const signUp = async (req, res) => {
     }
 };
 exports.signUp = signUp;
-//=====================LOGIN============================//
+//===========================LOGIN==============================//
 const signIn = async (req, res) => {
     try {
         const { identifier, password } = req.body;
@@ -85,12 +86,8 @@ const signIn = async (req, res) => {
             return res.status(401).send({ Error: "Invalid password" });
         }
         const token = jsonwebtoken_1.default.sign({ userId }, jwtsecret, { expiresIn: "30d" });
-        res.cookie("token", token, {
-            httpOnly: true,
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-        });
-        return res.status(200)
-            .json({ user });
+        res.cookie('token', token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 });
+        return res.status(200).json({ user });
     }
     catch (error) {
         return res.status(500).json({
@@ -99,6 +96,25 @@ const signIn = async (req, res) => {
     }
 };
 exports.signIn = signIn;
+//========================Get Profile =============================//
+const getProfile = async (req, res) => {
+    try {
+        const userId = req.params;
+        const profile = await userModel_1.default.findOne({
+            where: { userId },
+            include: [{
+                    model: postModel_1.default,
+                    as: "Post"
+                }]
+        });
+        return res.status(200).json(profile);
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+exports.getProfile = getProfile;
 //=======================SignOut======================//
 const logOut = (req, res) => {
     try {

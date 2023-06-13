@@ -20,6 +20,9 @@ db_1.db.sync().then(() => {
 });
 app.use((0, cors_1.default)({
     origin: 'http://localhost:5173',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Authorization', 'Content-Type']
 }));
 app.use((0, morgan_1.default)('dev'));
 app.use(express_1.default.json());

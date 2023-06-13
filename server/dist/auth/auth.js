@@ -25,6 +25,9 @@ const auth = async (req, res, next) => {
         req.user = verified;
         next();
     }
-    catch (error) { }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ Error: "Internal Server Error" });
+    }
 };
 exports.auth = auth;

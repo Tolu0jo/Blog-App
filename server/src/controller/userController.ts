@@ -5,6 +5,7 @@ import { RegisterUserSchema, options, userLoginSchema } from "../utils/utility";
 import jwt from "jsonwebtoken";
 import { Op } from "sequelize";
 import bcrypt from "bcryptjs";
+import Posts from "../model/postModel";
 
 const jwtsecret = process.env.JWT_SECRET as string;
 
@@ -29,21 +30,19 @@ export const signUp = async (req: Request, res: Response) => {
         [Op.or]: [{ username }, { email }],
       },
     })) as unknown as { [key: string]: string };
-    
+
     if (!user) {
-        const newUser = await Users.create({
-          userId,
-          email,
-          username,
-          password: encrytedPassword,
-          img,
-        });
-        return res
-          .status(201)
-          .json({ message: "User successfully registered", newUser });
-      
-    } else 
-     if (username === user.username) {
+      const newUser = await Users.create({
+        userId,
+        email,
+        username,
+        password: encrytedPassword,
+        img,
+      });
+      return res
+        .status(201)
+        .json({ message: "User successfully registered", newUser });
+    } else if (username === user.username) {
       return res.status(409).json({
         Error: "Username already exist, kindly choose another username",
       });
@@ -60,7 +59,8 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
-//=====================LOGIN============================//
+
+//===========================LOGIN==============================//
 
 export const signIn = async (req: Request, res: Response) => {
   try {
@@ -78,7 +78,9 @@ export const signIn = async (req: Request, res: Response) => {
         [Op.or]: [{ username: identifier }, { email: identifier }],
       },
     })) as unknown as { [key: string]: string };
-    const{userId}=user
+
+    const { userId } = user;
+
     if (!user) {
       return res.status(404).json({ Error: "User not found" });
     }
@@ -88,17 +90,11 @@ export const signIn = async (req: Request, res: Response) => {
       return res.status(401).send({ Error: "Invalid password" });
     }
 
-    
-
     const token = jwt.sign({ userId }, jwtsecret, { expiresIn: "30d" });
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      
-    })
-    return res.status(200)
-      .json({user});
+    res.cookie('token', token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 });  
+ 
+    
+    return res.status(200).json({ user });
   } catch (error) {
     return res.status(500).json({
       message: "Internal Server Error",
@@ -106,15 +102,33 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
-//=======================SignOut======================//
-export const logOut =(req:Request, res:Response)=>{
-   try {
-    res.clearCookie("token")
-    return res.status(200).json({message:"User logged out"})
-   } catch (error) {
-    console.log(error)
-    return res.status(500).json({
-        message: "Internal Server Error",
-      });
-   } 
+//========================Get Profile =============================//
+export const getProfile = async(req: Request, res: Response) => {
+  try {
+    const userId = req.params
+    const profile= await Users.findOne({
+  where:{userId},
+  include:[{
+    model:Posts,
+    as: "Post"
+  }]
+    })
+    return res.status(200).json(profile);
+  } catch (error) { 
+    console.log(error);
+    return res.status(500).json({message:"Internal Server Error"})
+  }
 }
+
+//=======================SignOut======================//
+export const logOut = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({ message: "User logged out" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};

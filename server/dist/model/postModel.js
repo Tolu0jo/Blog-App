@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
 const sequelize_1 = require("sequelize");
 const userModel_1 = __importDefault(require("./userModel"));
-const Posts = db_1.db.define('Post', {
+const Posts = db_1.db.define("Post", {
     id: {
         type: sequelize_1.DataTypes.UUID,
         defaultValue: sequelize_1.DataTypes.UUIDV4,
@@ -17,7 +17,7 @@ const Posts = db_1.db.define('Post', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    Desc: {
+    desc: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
@@ -28,16 +28,22 @@ const Posts = db_1.db.define('Post', {
     img: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
+        // defaultValue: 'null',
     },
     userId: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
         allowNull: false,
+        references: {
+            model: userModel_1.default,
+            key: 'userId',
+        }
     },
     cat: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-    }
+    },
 });
-userModel_1.default.hasMany(Posts, { foreignKey: 'userId', });
-Posts.belongsTo(userModel_1.default, { foreignKey: 'userId', });
+userModel_1.default.hasMany(Posts, { as: 'Post', foreignKey: "userId" });
+Posts.belongsTo(userModel_1.default, { as: 'User', foreignKey: "userId" });
 exports.default = Posts;
