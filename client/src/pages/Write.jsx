@@ -23,6 +23,7 @@ const Write = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState("");
 
+
   const uploadImage = async () => {
     let data = new FormData();
     data.append("file", image);
@@ -45,14 +46,16 @@ const Write = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      await uploadImage();
-     
-      state & img
-        ? await api
+
+
+     if(state){
+        await uploadImage();
+       setLoading(true);
+       console.log(img)
+        await api
             .put(`/posts/edit/${state.id}`, {
               title,
-              desc,
+              desc:getText(desc),
               cat,
               img,
             })
@@ -60,10 +63,14 @@ const Write = () => {
               setLoading(false);
               navigate(`/post/${state.id}`);
             })
-        : img && await api
+     }else{
+        await uploadImage();
+        setLoading(true);
+        console.log(img)
+        await api
             .post(`/posts/add`, {
               title,
-              desc,
+              desc:getText(desc),
               cat,
               img,
               userId: currentUser.userId,
@@ -73,6 +80,8 @@ const Write = () => {
               setLoading(false);
               navigate(`/post/${res.data.post.id}`);
             });
+  
+     }
     } catch (err) {
       console.log(err);
     }

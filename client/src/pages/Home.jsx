@@ -23,6 +23,14 @@ const Home = () => {
     fetchData();
   }, [cat]);
  
+  const getShortDesc = (desc) => {
+    const words = desc.split(" ");
+    if (words.length > 60) {
+      return words.slice(0, 60).join(" ") + " ...";
+    } else {
+      return desc;
+    }
+  };
 
   const getText = (html) =>{
     const doc = new DOMParser().parseFromString(html, "text/html")
@@ -46,7 +54,7 @@ const Home = () => {
               <Link className="link" to={`/post/${post.id}`}>
                 <h1>{post.title}</h1>
            
-              <p>{getText(post.desc)}</p>
+              <p>{getShortDesc(post.desc)}</p>
               <button>Read More</button>
               </Link>
             </div>

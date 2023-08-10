@@ -18,7 +18,7 @@ const Posts = db_1.db.define("Post", {
         allowNull: false,
     },
     desc: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.TEXT,
         allowNull: false,
     },
     date: {
