@@ -77,19 +77,20 @@ const signIn = async (req, res) => {
                 [sequelize_1.Op.or]: [{ username: identifier }, { email: identifier }],
             },
         }));
-        const { userId } = user;
         if (!user) {
-            return res.status(404).json({ Error: "User not found" });
+            return res.status(404).json({ Error: "Invalid credebtials" });
         }
+        const { userId } = user;
         const validUser = await bcryptjs_1.default.compare(password, user.password);
         if (!validUser) {
-            return res.status(401).send({ Error: "Invalid password" });
+            return res.status(401).send({ Error: "Invalid credentials" });
         }
         const token = jsonwebtoken_1.default.sign({ userId }, jwtsecret, { expiresIn: "30d" });
         res.cookie('token', token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 });
         return res.status(200).json({ user });
     }
     catch (error) {
+        console.log(error);
         return res.status(500).json({
             message: "Internal Server Error",
         });

@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSubscriber = void 0;
 const typeorm_1 = require("typeorm");
 const entitty_1 = require("./entitty");
-let UserSubscriber = class UserSubscriber {
+let UserSubscriber = exports.UserSubscriber = class UserSubscriber {
     listenTo() {
         return entitty_1.User;
     }
@@ -32,7 +32,6 @@ let UserSubscriber = class UserSubscriber {
         console.log(`After user remove: ${event?.entity?.name}`);
     }
 };
-UserSubscriber = __decorate([
+exports.UserSubscriber = UserSubscriber = __decorate([
     (0, typeorm_1.EventSubscriber)()
 ], UserSubscriber);
-exports.UserSubscriber = UserSubscriber;

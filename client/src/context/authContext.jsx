@@ -13,13 +13,14 @@ export const AuthContextProvider =({children})=>{
 const login =async (inputs)=>{
     const res =await api.post('/users/login',inputs)
     const user =res.data.user
-    const{password,...others} =user
+    const{password,...others} = user
     setCurrentUser(others)
   console.log(others)
 }
 const logout =async (inputs)=>{  
     const res =await api.post('/users/logout')
     setCurrentUser(null)
+    window.location.href = "/login"
 };
 useEffect(()=>{
     localStorage.setItem("user",JSON.stringify(currentUser))

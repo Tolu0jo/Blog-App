@@ -13,17 +13,19 @@ const posts_1 = __importDefault(require("./routes/posts"));
 const users_1 = __importDefault(require("./routes/users"));
 const db_1 = require("./config/db");
 const app = (0, express_1.default)();
-db_1.db.sync().then(() => {
+db_1.db.sync({ force: false }).then(() => {
     console.log("Database connected Successfully...");
 }).catch(err => {
     console.log(err);
 });
-app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Authorization', 'Content-Type']
-}));
+app.use((0, cors_1.default)(
+//   {
+//   origin: 'http://localhost:5173', 
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Authorization', 'Content-Type']
+// }
+));
 app.use((0, morgan_1.default)('dev'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));

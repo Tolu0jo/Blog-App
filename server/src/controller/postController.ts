@@ -3,12 +3,11 @@ import Posts from "../model/postModel";
 import Users from "../model/userModel";
 
 
-export const createPost = (req: Request| any, res: Response) => {
+export const createPost = async (req: Request| any, res: Response) => {
   try {
      
-   
     const {title, desc,cat,date,userId,img} = req.body
-   const post = Posts.create({
+   const post = await Posts.create({
     title,
     desc,
     img,
@@ -30,18 +29,17 @@ export const getPost = async (req: Request, res: Response) => {
      const post = await Posts.findAll({
             where: {cat},
           });
-          const  posts = post.map((p) => p.dataValues);
-          console.log(posts);
+       
  
        
-          return res.status(200).json({posts})
+          return res.status(200).json({post})
     }
 
     const post =  await Posts.findAll({
      })
-     const  posts = post.map((p) => p.dataValues);
+    
    
-     return res.status(200).json({posts})
+     return res.status(200).json({post})
    
     
   } catch (error) {
@@ -66,14 +64,14 @@ export const getSinglePost = async(req: Request, res: Response) => {
 
 
       const postData= {
-        id: post?.dataValues.id,
-        title: post?.dataValues.title,
-        desc: post?.dataValues.desc,
-        img: post?.dataValues.img,
-        cat: post?.dataValues.cat,
-        date: post?.dataValues.date,
-        username: post?.User.dataValues.username,
-        userImg: post?.User.dataValues.userImg
+        id: post?.id,
+        title: post?.title,
+        desc: post?.desc,
+        img: post?.img,
+        cat: post?.cat,
+        date: post?.date,
+        username: post?.User.username,
+        userImg: post?.User.userImg
       };
 
     return res.status(200).json(postData);

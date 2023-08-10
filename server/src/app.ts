@@ -11,18 +11,20 @@ import { db } from './config/db';
 
 const app = express();
 
-db.sync().then(()=>{
+db.sync({force:false}).then(()=>{
   console.log("Database connected Successfully...")
 }).catch(err=>{
   console.log(err)
 })
 
-app.use(cors({
-  origin: 'http://localhost:5173', 
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Authorization', 'Content-Type']
-}));
+app.use(cors(
+//   {
+//   origin: 'http://localhost:5173', 
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Authorization', 'Content-Type']
+// }
+));
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -6,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePost = exports.deletePost = exports.getSinglePost = exports.getPost = exports.createPost = void 0;
 const postModel_1 = __importDefault(require("../model/postModel"));
 const userModel_1 = __importDefault(require("../model/userModel"));
-const createPost = (req, res) => {
+const createPost = async (req, res) => {
     try {
         const { title, desc, cat, date, userId, img } = req.body;
-        const post = postModel_1.default.create({
+        const post = await postModel_1.default.create({
             title,
             desc,
             img,
@@ -32,13 +32,10 @@ const getPost = async (req, res) => {
             const post = await postModel_1.default.findAll({
                 where: { cat },
             });
-            const posts = post.map((p) => p.dataValues);
-            console.log(posts);
-            return res.status(200).json({ posts });
+            return res.status(200).json({ post });
         }
         const post = await postModel_1.default.findAll({});
-        const posts = post.map((p) => p.dataValues);
-        return res.status(200).json({ posts });
+        return res.status(200).json({ post });
     }
     catch (error) {
         console.log(error);
@@ -61,14 +58,14 @@ const getSinglePost = async (req, res) => {
             ],
         });
         const postData = {
-            id: post?.dataValues.id,
-            title: post?.dataValues.title,
-            desc: post?.dataValues.desc,
-            img: post?.dataValues.img,
-            cat: post?.dataValues.cat,
-            date: post?.dataValues.date,
-            username: post?.User.dataValues.username,
-            userImg: post?.User.dataValues.userImg
+            id: post?.id,
+            title: post?.title,
+            desc: post?.desc,
+            img: post?.img,
+            cat: post?.cat,
+            date: post?.date,
+            username: post?.User.username,
+            userImg: post?.User.userImg
         };
         return res.status(200).json(postData);
     }
